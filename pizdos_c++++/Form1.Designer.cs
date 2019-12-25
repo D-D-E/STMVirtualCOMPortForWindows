@@ -1,4 +1,4 @@
-﻿namespace pizdos_c____
+﻿namespace SerialUSB
 {
     partial class Form1
     {

@@ -10,7 +10,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 using System.IO;
 
-namespace pizdos_c____
+namespace SerialUSB
 {
     public partial class Form1 : Form
     {
@@ -252,6 +252,8 @@ namespace pizdos_c____
 
         private void Button4_Click(object sender, EventArgs e)
         {
+            old_result.pin_status = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            result.pin_status = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
             string temp_data = string.Empty;
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Open a Text File";

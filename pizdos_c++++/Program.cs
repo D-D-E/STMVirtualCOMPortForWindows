@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace pizdos_c____
+namespace SerialUSB
 {
     static class Program
     {
