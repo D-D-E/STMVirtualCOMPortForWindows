@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pizdos_c++++", "pizdos_c++++\pizdos_c++++.csproj", "{0A958369-2182-4AAC-99AB-D3751AA2AC70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialUsb", "pizdos_c++++\SerialUsb.csproj", "{0A958369-2182-4AAC-99AB-D3751AA2AC70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

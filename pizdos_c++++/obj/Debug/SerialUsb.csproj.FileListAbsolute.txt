@@ -1,0 +1,12 @@
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\bin\Debug\pizdos_c++++.exe.config
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\bin\Debug\pizdos_c++++.exe
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\bin\Debug\pizdos_c++++.pdb
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\bin\Debug\ScottPlot.dll
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\SerialUsb.csprojAssemblyReference.cache
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\pizdos_c____.Form1.resources
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\pizdos_c____.Properties.Resources.resources
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\SerialUsb.csproj.GenerateResource.cache
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\SerialUsb.csproj.CoreCompileInputs.cache
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\SerialUsb.csproj.CopyComplete
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\pizdos_c++++.exe
+C:\Users\dashk\source\repos\pizdos_c++++\pizdos_c++++\obj\Debug\pizdos_c++++.pdb

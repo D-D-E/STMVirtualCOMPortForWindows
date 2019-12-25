@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Windows.Forms;
+using System.IO;
 
 namespace pizdos_c____
 {
@@ -20,8 +21,10 @@ namespace pizdos_c____
             public int time_tick;
         }
 
+        int start_time = 0;
         List<rx_data> list_data = new List<rx_data>();
         Int64 X_Axis_Base = 0;
+        bool first_data = false;
 
         public Form1()
         {
@@ -60,7 +63,7 @@ namespace pizdos_c____
                 serialPort1.Write(st, 0, 5);
                 button1.Text = "STOP";
                 button1.BackColor = System.Drawing.Color.Red;
-                timer1.Enabled = true;
+                first_data = true;
                 return;
             }
 
@@ -71,6 +74,7 @@ namespace pizdos_c____
                 serialPort1.Close();
                 button1.Text = "START";
                 button1.BackColor = System.Drawing.Color.Green;
+                first_data = false;
                 timer1.Enabled = false;
                 return;
             }
@@ -81,32 +85,57 @@ namespace pizdos_c____
             SerialPortReset();
         }
 
-        //разбираю полученные данные
+        rx_data old_result;
+        rx_data result;
         private void ReadRxData(string data)
         {
-            rx_data result;
+            var temp_port_value = "";
+            var temp_time = "";
+            int port = 0, time = 0;
+
+            for (int i = 0; i < 4; i++)
+                temp_port_value += Convert.ToChar(data[i]);
+            Int32.TryParse(temp_port_value, out port);
+
+            for (int i = 5; i < 11; i++)
+                temp_time += Convert.ToChar(data[i]);
+            temp_time = temp_time.PadLeft(6, '0');
+            Int32.TryParse(temp_time, out time);
+
+            if (first_data)
+            {
+                timer1.Enabled = true;
+                old_result.pin_status = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+                result.pin_status = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+                first_data = false;
+                start_time = time;
+            }
+
+            string binary = Convert.ToString(port, 2);
+            binary = binary.PadLeft(8, '0');
+
+            //int[] softport = new int[8];
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    softport[i] = (int)Char.GetNumericValue(data[i]);
+            //}
+
             int[] pin_status = new int[8];
             for (int i = 0; i < 8; i++)
             {
-                pin_status[i] = Convert.ToInt32(data[i]) - 48;
+                pin_status[i] = Convert.ToInt32(binary[i]) - 48;
             }
+            old_result.pin_status = result.pin_status;
+            old_result.time_tick = time - start_time;
             result.pin_status = pin_status;
+            result.time_tick = time - start_time;
 
-            string time = "";
-            for (int i = 9; i < 15; i++)
-            {
-                time += data[i];
-            }
-            result.time_tick = Int32.Parse(time);
-
+            list_data.Add(old_result);
             list_data.Add(result);
         }
 
-        //русую 
         private void DrawRxData()
         {
-            //formsPlot1.plt.PlotScatter(list_data.ToArray().time_tick, list_data.ToArray()[].pin_status[0]);
-            // Выделяю восемь листов пушо могу себе позволить
             List<double> pin0 = new List<double>();
             List<double> pin1 = new List<double>();
             List<double> pin2 = new List<double>();
@@ -162,23 +191,13 @@ namespace pizdos_c____
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            
-        }
-
-        private void Button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            char[] byte_rx = new char[15];
-            serialPort1.Read(byte_rx, 0, 15);
+            char[] byte_rx = new char[13];
+            serialPort1.Read(byte_rx, 0, 13);
             serialPort1.DiscardInBuffer();
 
             string serial_rx = "";
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 13; i++)
             {
                 serial_rx += byte_rx[i];
             }
@@ -193,6 +212,61 @@ namespace pizdos_c____
 
             ReadRxData(serial_rx);
             DrawRxData();
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            string result_port = string.Join("", result.pin_status);
+            string result_time = (result.time_tick+1).ToString();
+            result_time = result_time.PadLeft(6, '0');
+            string temp_data = result_port + ":" + result_time;
+            ReadRxData(temp_data);
+            DrawRxData();
+        }
+
+        private void Button3_Click_1(object sender, EventArgs e)
+        {
+            SaveFileDialog sfdlg = new SaveFileDialog();
+            sfdlg.Filter = "Text Files (*.txt) | *.txt";
+            if (sfdlg.ShowDialog() == DialogResult.OK)
+            {
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(sfdlg.FileName))
+                {
+                    foreach (var line in list_data)
+                    {
+                        string result_time = line.time_tick.ToString();
+                        result_time = result_time.PadLeft(6, '0');
+                        string result_port = string.Join("", line.pin_status);
+                        file.Write(result_port);
+                        file.Write(":");
+                        file.WriteLine(result_time);
+                    }
+                }
+            }
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            string temp_data = string.Empty;
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Open a Text File";
+            ofd.Filter = "Text Files (*.txt) | *.txt | All Files(*.*) | *.*";
+            DialogResult dr = ofd.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                StreamReader sr = new StreamReader(ofd.FileName);
+                while ((temp_data = sr.ReadLine()) != null)
+                {
+                    ReadRxData(temp_data);
+                    DrawRxData();
+                }
+                sr.Close();
+            }
         }
     }
 }
