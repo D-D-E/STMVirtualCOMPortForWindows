@@ -114,12 +114,6 @@ namespace SerialUSB
             string binary = Convert.ToString(port, 2);
             binary = binary.PadLeft(8, '0');
 
-            //int[] softport = new int[8];
-            //for (int i = 0; i < 8; i++)
-            //{
-            //    softport[i] = (int)Char.GetNumericValue(data[i]);
-            //}
-
             int[] pin_status = new int[8];
             for (int i = 0; i < 8; i++)
             {
